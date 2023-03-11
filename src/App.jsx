@@ -147,7 +147,7 @@ function WaitlistPage({ initialWaitlist, password }) {
           <thead>
             <tr className="border-b border-slate-300 bg-slate-50 rounded-tl-lg">
               <th className="text-left py-4 px-6 w-4/12">Name</th>
-              <th className="text-left py-4 pr-6 w-5/12">Phone/email</th>
+              <th className="text-left py-4 pr-6 w-4/12">Phone/email</th>
               <th className="text-left py-4 pr-6 w-1/12">Size</th>
               <th className="text-left py-4 pr-6 w-1/12">Ready</th>
               <th className="text-left py-4 pr-6 w-2/12"></th>
