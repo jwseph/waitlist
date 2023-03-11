@@ -14,24 +14,26 @@ function NewParty({ name, size, contact, onNameChange, onSizeChange, onContactCh
           Enter your name, party size, and contact information
         </p>
       </div>
-      <form className="mt-8 space-y-6">
-        <input type="hidden" name="remember" value="true"/>
+      <form className="mt-8 space-y-6" onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}>
         <div className="-space-y-px rounded-md shadow-sm">
           <div>
             <label htmlFor="name" className="sr-only">Name</label>
-            <input autocapitalize="words" defaultValue={name} onChange={e => onNameChange(e.target.value.trim())} id="name" name="name" type="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name"/>
+            <input autoCapitalize="words" defaultValue={name} onChange={e => onNameChange(e.target.value.trim())} id="name" name="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name"/>
           </div>
           <div>
             <label htmlFor="size" className="sr-only">Party size</label>
-            <input defaultValue={size} onChange={e => onSizeChange(e.target.value.trim())} id="size" name="size" type="size" autoComplete="off" className="relative block w-full border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Party size"/>
+            <input defaultValue={size} onChange={e => onSizeChange(e.target.value.trim())} id="size" name="size" autoComplete="off" className="relative block w-full border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Party size"/>
           </div>
           <div>
             <label htmlFor="contact" className="sr-only">Phone/email</label>
-            <input defaultValue={contact} onChange={e => onContactChange(e.target.value.trim())} id="contact" name="contact" type="contact" autoComplete="off" className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Phone/email"/>
+            <input defaultValue={contact} onChange={e => onContactChange(e.target.value.trim())} id="contact" name="contact" autoComplete="off" className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Phone/email"/>
           </div>
         </div>
         <div>
-          <button type='button' onClick={onSubmit} className="group relative flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <button className="group relative flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
             Submit
           </button>
         </div>
@@ -53,19 +55,18 @@ function PartyWaiting({ name, size, contact, timestamp }) {
         </p>
       </div>
       <form className="mt-8 space-y-6">
-        <input type="hidden" name="remember" value="true"/>
         <div className="-space-y-px rounded-md shadow-sm">
           <div>
             <label htmlFor="name" className="sr-only">Name</label>
-            <input value={name} id="name" name="name" type="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name" disabled/>
+            <input value={name} id="name" name="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name" disabled/>
           </div>
           <div>
             <label htmlFor="size" className="sr-only">Party size</label>
-            <input value={size} id="size" name="size" type="size" autoComplete="off" className="relative block w-full border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Party size" disabled/>
+            <input value={size} id="size" name="size" autoComplete="off" className="relative block w-full border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Party size" disabled/>
           </div>
           <div>
             <label htmlFor="contact" className="sr-only">Phone/email</label>
-            <input value={contact} id="contact" name="contact" type="contact" autoComplete="off" className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Phone/email" disabled/>
+            <input value={contact} id="contact" name="contact" autoComplete="off" className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Phone/email" disabled/>
           </div>
         </div>
         <div>
@@ -85,10 +86,7 @@ function PartyWaiting({ name, size, contact, timestamp }) {
   )
 }
 
-function Waitlist() {
-  useEffect(() => {
-    document.title = 'Waitlist Demo - Waitlist';
-  }, []);
+function SignInPage({ onPasswordChange, onSubmit }) {
   return (
     <div className="w-full max-w-md space-y-8 mb-8">
       <div>
@@ -97,7 +95,43 @@ function Waitlist() {
           Undergoing construction!
         </p>
       </div>
+      <form className="mt-8 space-y-6" onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}>
+        <div className="-space-y-px rounded-md shadow-sm">
+          <div>
+            <label htmlFor="password" className="sr-only">Admin password</label>
+            <input onChange={e => onPasswordChange(e.target.value)} id="password" name="password" type="password" autoComplete="off" className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Admin password"/>
+          </div>
+        </div>
+        <div>
+          <button className="group relative flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            Authenticate
+          </button>
+        </div>
+      </form>
     </div>
+  )
+}
+
+function Waitlist() {
+  const [password, setPassword] = useState();
+  useEffect(() => {
+    document.title = 'Waitlist Demo - Waitlist';
+  }, []);
+  return (
+    <SignInPage
+      onPasswordChange={setPassword}
+      onSubmit={async () => {
+        let url = `https://kamiak-io.fly.dev/waitlist/waiting?password=${encodeURIComponent(password)}`;
+        fetch(url, {method: 'GET'}).then(() => {
+          console.log('Success');
+        }).catch((e) => {
+          console.log('Wrong password!');
+        })
+      }}
+    />
   )
 }
 
@@ -112,7 +146,6 @@ function App() {
   
   useEffect(() => {
     const interval = setInterval(async () => {
-      console.log('Refreshing count');
       let resp = await fetch('https://kamiak-io.fly.dev/waitlist/num_waiting');
       let text = await resp.text();
       setCount(+text);
