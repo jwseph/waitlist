@@ -165,7 +165,7 @@ function WaitlistPage({ initialWaitlist, password }) {
                     <td className="py-4 pr-6 text-slate-600">{data.ready ? "Yes" : "No"}</td>
                     <td className="py-4 pr-6 text-slate-600 text-right">
                       <span
-                        className="font-semibold text-indigo-600 hover:text-indigo-800 active:text-indigo-800 cursor-pointer select-none"
+                        className="font-semibold text-indigo-600 hover:text-indigo-500 active:text-indigo-500 cursor-pointer select-none"
                         onClick={async () => {
                           let action = data.ready ? 'remove' : 'ready';
                           let url = `https://kamiak-io.fly.dev/waitlist/${action}?timestamp=${timestamp}&password=${encodeURIComponent(password)}`;
