@@ -137,62 +137,60 @@ function WaitlistPage({ initialWaitlist, password }) {
     setWaitlist(await resp.json());
   }
   return (
-    <div className="w-full max-w-3xl space-y-8 mb-8 flex-1">
+    <div className="w-full max-w-3xl space-y-8 mb-8 flex-1 inline-flex flex-col justify-center">
       <div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">Waitlist</h2>
-        <p className="mt-2 text-center text-sm text-slate-600">
-          Customer waiting list
-        </p>
-        <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm mt-6">
-          <table className="table-fixed bg-white text-sm w-full">
-            <thead>
-              <tr className="border-b border-slate-300 bg-slate-50 rounded-tl-lg">
-                <th className="text-left py-4 px-6 w-4/12">Name</th>
-                <th className="text-left py-4 pr-6 w-5/12">Phone/email</th>
-                <th className="text-left py-4 pr-6 w-1/12">Size</th>
-                <th className="text-left py-4 pr-6 w-1/12">Ready</th>
-                <th className="text-left py-4 pr-6 w-2/12"></th>
+        <p className="mt-2 text-center text-sm text-slate-600">Customer waiting list</p>
+      </div>
+      <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+        <table className="table-fixed bg-white text-sm w-full">
+          <thead>
+            <tr className="border-b border-slate-300 bg-slate-50 rounded-tl-lg">
+              <th className="text-left py-4 px-6 w-4/12">Name</th>
+              <th className="text-left py-4 pr-6 w-5/12">Phone/email</th>
+              <th className="text-left py-4 pr-6 w-1/12">Size</th>
+              <th className="text-left py-4 pr-6 w-1/12">Ready</th>
+              <th className="text-left py-4 pr-6 w-2/12"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              Object.keys(waitlist).map(function(timestamp, index) {
+                let data = waitlist[timestamp];
+                return (
+                  <tr className="border-b border-slate-200 last:border-b-0" key={index}>
+                    <td className="py-4 px-6 font-semibold truncate">{data.name}</td>
+                    <td className="py-4 pr-6 text-slate-600 truncate">{data.contact}</td>
+                    <td className="py-4 pr-6 text-slate-600">{data.size}</td>
+                    <td className="py-4 pr-6 text-slate-600">{data.ready ? "Yes" : "No"}</td>
+                    <td className="py-4 pr-6 text-slate-600 text-right">
+                      <span
+                        className="font-semibold text-indigo-600 hover:text-indigo-800 active:text-indigo-800 cursor-pointer select-none"
+                        onClick={async () => {
+                          let action = data.ready ? 'remove' : 'ready';
+                          let url = `https://kamiak-io.fly.dev/waitlist/${action}?timestamp=${timestamp}&password=${encodeURIComponent(password)}`;
+                          await fetch(url, {method: 'POST'})
+                          await refreshWaitlist();
+                        }}
+                      >
+                        {data.ready ? "Remove" : "Notify"}
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })
+            }
+            {Object.keys(waitlist).length == 0 && (
+              <tr className="border-b border-slate-200 last:border-b-0">
+                <td></td>
+                <td className="py-4 text-slate-600 text-center">No one is waiting right now...</td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
-            </thead>
-            <tbody>
-              {
-                Object.keys(waitlist).map(function(timestamp, index) {
-                  let data = waitlist[timestamp];
-                  return (
-                    <tr className="border-b border-slate-200 last:border-b-0" key={index}>
-                      <td className="py-4 px-6 font-semibold truncate">{data.name}</td>
-                      <td className="py-4 pr-6 text-slate-600 truncate">{data.contact}</td>
-                      <td className="py-4 pr-6 text-slate-600">{data.size}</td>
-                      <td className="py-4 pr-6 text-slate-600">{data.ready ? "Yes" : "No"}</td>
-                      <td className="py-4 pr-6 text-slate-600 text-right">
-                        <span
-                          className="font-semibold text-indigo-600 hover:text-indigo-800 active:text-indigo-800 cursor-pointer select-none"
-                          onClick={async () => {
-                            let action = data.ready ? 'remove' : 'ready';
-                            let url = `https://kamiak-io.fly.dev/waitlist/${action}?timestamp=${timestamp}&password=${encodeURIComponent(password)}`;
-                            let resp = await fetch(url, {method: 'POST'})
-                            await refreshWaitlist();
-                          }}
-                        >
-                          {data.ready ? "Remove" : "Notify"}
-                        </span>
-                      </td>
-                    </tr>
-                  )
-                })
-              }
-              {Object.keys(waitlist).length == 0 && (
-                <tr className="border-b border-slate-200 last:border-b-0">
-                  <td></td>
-                  <td className="py-4 text-slate-600 text-center">No one is waiting right now...</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          </div>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   )
@@ -200,22 +198,20 @@ function WaitlistPage({ initialWaitlist, password }) {
 
 function Waitlist() {
   const [password, setPassword] = useState();
-  const [correctPassword, setCorrectPassword] = useState(false);
-  const [waitlist, setWaitlist] = useState();
+  const [waitlist, setWaitlist] = useState(null);
   useEffect(() => {
     document.title = 'Waitlist Demo - Waitlist';
   }, []);
   return (
-    !correctPassword
+    !waitlist
     ? <SignInPage
         onPasswordChange={setPassword}
         onSubmit={async () => {
           let url = `https://kamiak-io.fly.dev/waitlist/waiting?password=${encodeURIComponent(password)}`;
           fetch(url, {method: 'GET'}).then(async (resp) => {
             setWaitlist(await resp.json());
-            setCorrectPassword(true);
           }).catch((e) => {
-            setCorrectPassword(false);
+            setWaitlist(null);
           })
         }}
       />
