@@ -19,7 +19,7 @@ function NewParty({ name, size, contact, onNameChange, onSizeChange, onContactCh
         <div className="-space-y-px rounded-md shadow-sm">
           <div>
             <label htmlFor="name" className="sr-only">Name</label>
-            <input defaultValue={name} onChange={e => onNameChange(e.target.value.trim())} id="name" name="name" type="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name"/>
+            <input autocapitalize="words" defaultValue={name} onChange={e => onNameChange(e.target.value.trim())} id="name" name="name" type="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name"/>
           </div>
           <div>
             <label htmlFor="size" className="sr-only">Party size</label>
