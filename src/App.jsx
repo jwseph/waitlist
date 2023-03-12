@@ -159,7 +159,7 @@ function WaitlistPage({ initialWaitlist, password }) {
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">Waitlist</h2>
         <p className="mt-2 text-center text-sm text-slate-600">Customer waiting list</p>
       </div>
-      <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+      <div className="border border-slate-300 rounded-lg overflow-hidden shadow-sm text-slate-900">
         <table className="table-fixed bg-white text-sm w-full">
           <thead>
             <tr className="border-b border-slate-300 bg-slate-50 rounded-tl-lg">
@@ -246,7 +246,7 @@ function QRCodePage() {
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">Waitlist</h2>
         <p className="mt-2 text-center text-sm text-slate-600">Scan the QR code below to join the waiting list</p>
       </div>
-      <div className='bg-white rounded-lg p-6'>
+      <div className='bg-white rounded-lg p-6 shadow-lg'>
         <img src='/qrcode.png' style={{imageRendering:'pixelated'}} className='w-48 h-48'/>
       </div>
     </div>
