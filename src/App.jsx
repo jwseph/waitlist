@@ -44,18 +44,23 @@ function NewParty({ name, size, contact, onNameChange, onSizeChange, onContactCh
 
 function PartyWaiting({ name, size, contact, timestamp }) {
   const [ready, setReady] = useState(false);
+  const [done, setDone] = useState(false);
   useEffect(() => {
     document.title = 'Waitlist Demo - Waiting';
     console.log(timestamp);
     const interval = setInterval(async () => {
       let url = `https://kamiak-io.fly.dev/waitlist/is_ready?timestamp=${timestamp}`;
-      let resp = await fetch(url, {method: 'GET'})
-      setReady(await resp.text() == 'true');
+      fetch(url, {method: 'GET'}).then(async (resp) => {
+        setReady(await resp.text() == 'true');
+      }).catch((e) => {
+        setDone(true);
+      })
     }, 1000);
     return () => clearInterval(interval);
   }, []);
   return (
     <div className="w-full max-w-md space-y-8 mb-8">
+      {!done ? (
       <div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
           {ready ? "Table's ready" : 'Request sent'}
@@ -64,34 +69,46 @@ function PartyWaiting({ name, size, contact, timestamp }) {
           {ready ? 'Please come to your table' : 'You will be notified when your table is ready'}
         </p>
       </div>
-      <form className="mt-8 space-y-6">
-        <div className="-space-y-px rounded-md shadow-sm">
-          <div>
-            <label htmlFor="name" className="sr-only">Name</label>
-            <input value={name} id="name" name="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name" disabled/>
+      ) : (
+      <div>
+        <h1 className="mt-6 text-center text-5xl font-bold tracking-tight text-slate-900">
+          Thank you
+        </h1>
+        <p className="mt-2 text-center text-md text-slate-600">
+          Have a nice time!
+        </p>
+      </div>
+      )}
+      {!done && (
+        <form className="mt-8 space-y-6">
+          <div className="-space-y-px rounded-md shadow-sm">
+            <div>
+              <label htmlFor="name" className="sr-only">Name</label>
+              <input value={name} id="name" name="name" autoComplete="off" className="relative block w-full rounded-t-md border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Name" disabled/>
+            </div>
+            <div>
+              <label htmlFor="size" className="sr-only">Party size</label>
+              <input value={size} id="size" name="size" type='number' autoComplete="off" className="relative block w-full border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Party size" disabled/>
+            </div>
+            <div>
+              <label htmlFor="contact" className="sr-only">Phone/email</label>
+              <input value={contact} id="contact" name="contact" autoComplete="off" className="relative block w-full rounded-b-md border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Phone/email" disabled/>
+            </div>
           </div>
           <div>
-            <label htmlFor="size" className="sr-only">Party size</label>
-            <input value={size} id="size" name="size" type='number' autoComplete="off" className="relative block w-full border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Party size" disabled/>
+            <Link to='/'>
+              <button type="button" className="group relative flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                onClick={async () => {
+                  let url = `https://kamiak-io.fly.dev/waitlist/cancel?timestamp=${encodeURIComponent(timestamp)}`;
+                  await fetch(url, {method: 'POST'});
+                }}
+              >
+                Cancel
+              </button>
+            </Link>
           </div>
-          <div>
-            <label htmlFor="contact" className="sr-only">Phone/email</label>
-            <input value={contact} id="contact" name="contact" autoComplete="off" className="relative block w-full rounded-b-md border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" placeholder="Phone/email" disabled/>
-          </div>
-        </div>
-        <div>
-          <Link to='/'>
-            <button type="button" className="group relative flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={async () => {
-                let url = `https://kamiak-io.fly.dev/waitlist/cancel?timestamp=${encodeURIComponent(timestamp)}`;
-                await fetch(url, {method: 'POST'});
-              }}
-            >
-              Cancel
-            </button>
-          </Link>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   )
 }
@@ -147,7 +164,7 @@ function WaitlistPage({ initialWaitlist, password }) {
           <thead>
             <tr className="border-b border-slate-300 bg-slate-50 rounded-tl-lg">
               <th className="text-left py-4 px-6 w-4/12">Name</th>
-              <th className="text-left py-4 pr-6 w-5/12">Phone/email</th>
+              <th className="text-left py-4 pr-6 w-4/12">Phone/email</th>
               <th className="text-left py-4 pr-6 w-1/12">Size</th>
               <th className="text-left py-4 pr-6 w-1/12">Ready</th>
               <th className="text-left py-4 pr-6 w-2/12"></th>
